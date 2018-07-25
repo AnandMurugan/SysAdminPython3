@@ -1,0 +1,18 @@
+#!/usr/bin/env python3.7
+
+def get_filename(reprompt=False):
+    filename = input("Please enter a file name to create (Filename can't be empty) : ").strip()
+    return filename or get_filename(True)
+
+
+filename = get_filename()
+
+text = input("Please enter text to be written to file (Empty line closes the input) : ").strip()
+
+content = []
+while text:
+    content.append(f"{text}\n")
+    text = input().strip()
+
+with open(filename,'w') as f:
+    f.writelines(content)

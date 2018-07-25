@@ -1,0 +1,25 @@
+#!/usr/bin/env python3.7
+import sys
+
+def get_filename(reprompt=False):
+    filename = input("Please enter filename to read from (Filename can not be empty):")
+    return filename or get_filename(True)
+
+filename = get_filename()
+
+try:
+    f = open(filename,'rt')
+except FileNotFoundError as err:
+    print(f"Error: {err}")
+    sys.exit(2)
+else:
+    with f:
+        linenum = input("Please enter a line number to read: ").strip()
+        linenum = int(linenum)
+        lines = f.readlines()
+        if linenum >= len(lines):
+            print("Error: Line number doesn't exist. File is too short")
+            sys.exit(1)
+        else:
+            print(lines[linenum - 1], end="")
+
