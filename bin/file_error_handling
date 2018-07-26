@@ -1,0 +1,25 @@
+#!/usr/bin/env python3.7
+
+import sys
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='Print line from a file.')
+parser.add_argument('filename',help='File to read content from.' )
+parser.add_argument('linenumber', type=int, help='Line number of the line to print.')
+
+args = parser.parse_args()
+
+try:
+    f = open(args.filename,'rt')
+except FileNotFoundError as err:
+    print(f"Error: {err}")
+    sys.exit(2)
+else:
+    with f:
+        lines = f.readlines()
+        if args.linenumber >= len(lines):
+            print("Line doesn't exist. File is too short.")
+            sys.exit(3)
+        else:
+            print(f"{lines[args.linenumber - 1]}", end="")
+
