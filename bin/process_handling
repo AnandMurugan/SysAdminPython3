@@ -1,0 +1,20 @@
+#!/usr/bin/env python3.7
+
+import os
+import subprocess
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description = "Program to kill a process running on a port. ")
+parser.add_argument("port_number", help="Port number to check if a process is running.")
+
+args = parser.parse_args()
+
+proc = subprocess.run(['lsof', '-n', '-i4TCP:' + args.port_number], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+lines = proc.stdout.decode().split('\n')
+matching_keyword = 'LISTEN'
+
+for line in lines:
+    if matching_keyword in line:
+        process_id = int(line.split()[1])
+        os.kill(process_id, 9)
