@@ -1,0 +1,30 @@
+#!/home/user/SysAdminPython3/bin/venvs/print/bin/python
+
+import json
+import requests
+import sys
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='Program to print contents of a page to a file.')
+parser.add_argument('url', help='url of web site to downloaad contents.')
+parser.add_argument('filename', help='destination file to print the page to.')
+parser.add_argument('--format', default='html', choices = ['html', 'json'], help='Format of response document (JSON/HTML)')
+
+args = parser.parse_args()
+res = requests.get(args.url)
+
+if res.status_code!= 200:
+    print(f"Error: unable to connect to website {args.url}")
+    sys.exít(1)
+
+if args.format == 'json':
+    try:
+        content = json.dumps(res.json())
+    except ValueError as err:
+        print(f"Error: response is not json - {err}")
+else:
+    content = res.text
+
+
+with open(args.filename, 'w') as f:
+        f.write(content)
